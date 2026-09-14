@@ -65,6 +65,35 @@ figcaption{padding:14px 15px;font:12px Arial,sans-serif;color:#cfc2c9;letter-spa
 .final{font-size:clamp(28px,5vw,54px);line-height:1.25;color:#fff;margin:25px auto;max-width:800px}
 .footer{text-align:center;color:#8e818a;font:11px Arial,sans-serif;letter-spacing:.08em}
 .heart{position:fixed;bottom:-30px;font-size:18px;pointer-events:none;animation:float 5s linear forwards;z-index:5}
+
+/* Music Player Floating Button Styles */
+.music-btn-container {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 1000;
+}
+.music-btn {
+  border: 1px solid var(--line);
+  background: rgba(18, 11, 24, 0.85);
+  color: var(--gold);
+  border-radius: 999px;
+  padding: 12px 20px;
+  font: 600 13px Arial, sans-serif;
+  cursor: pointer;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.music-btn:hover {
+  transform: scale(1.05);
+  background: rgba(255, 111, 159, 0.2);
+  color: #fff;
+}
+
 @keyframes float{to{transform:translateY(-110vh) rotate(20deg);opacity:0}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:none}}
 @media(max-width:760px){
@@ -72,6 +101,7 @@ figcaption{padding:14px 15px;font:12px Arial,sans-serif;color:#cfc2c9;letter-spa
  .gallery img{height:520px}
  .event{grid-template-columns:1fr;gap:8px}
  section{padding:55px 0}
+ .music-btn-container {bottom: 15px; right: 15px;}
 }
 </style>
 </head>
@@ -82,7 +112,7 @@ figcaption{padding:14px 15px;font:12px Arial,sans-serif;color:#cfc2c9;letter-spa
     <div class="eyebrow">A tiny secret made for one person</div>
     <h1>Archu.</h1>
     <p class="subtitle">Before you scroll any further… take a breath. This little corner of the internet belongs to our memories.</p>
-    <button class="btn" onclick="document.getElementById('chapter').scrollIntoView()">Open the surprise ✦</button>
+    <button class="btn" onclick="startSurprise()">Open the surprise ✦</button>
     <div class="scroll">SCROLL SLOWLY ↓</div>
   </div>
 </section>
@@ -179,8 +209,46 @@ figcaption{padding:14px 15px;font:12px Arial,sans-serif;color:#cfc2c9;letter-spa
   </div>
 </section>
 
+<!-- Floating Audio Controls -->
+<div class="music-btn-container">
+  <audio id="bg-music" loop>
+    <source src="I Wanna Be Yours(MP3_320K).mp3" type="audio/mpeg">
+  </audio>
+  <button class="music-btn" id="musicToggleBtn" onclick="toggleAudio()">
+    🎵 Play Music
+  </button>
+</div>
+
 <script>
+function playAudio() {
+  const music = document.getElementById('bg-music');
+  const btn = document.getElementById('musicToggleBtn');
+  if (music.paused) {
+    music.play().then(() => {
+      btn.innerHTML = '⏸ Pause Music';
+    }).catch(e => console.log('Autoplay prevented by browser', e));
+  }
+}
+
+function toggleAudio() {
+  const music = document.getElementById('bg-music');
+  const btn = document.getElementById('musicToggleBtn');
+  if (music.paused) {
+    music.play();
+    btn.innerHTML = '⏸ Pause Music';
+  } else {
+    music.pause();
+    btn.innerHTML = '🎵 Play Music';
+  }
+}
+
+function startSurprise() {
+  document.getElementById('chapter').scrollIntoView();
+  playAudio();
+}
+
 function revealMessage(){
+  playAudio();
   document.getElementById('message').classList.add('show');
   for(let i=0;i<18;i++){
     setTimeout(()=>{
@@ -195,4 +263,5 @@ function revealMessage(){
 }
 </script>
 </body>
-</html>
+  </html>
+  
