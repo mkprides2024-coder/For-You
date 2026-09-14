@@ -33,13 +33,14 @@ p{font-family:Arial,sans-serif;line-height:1.8;color:var(--muted);font-size:16px
   cursor:pointer;backdrop-filter:blur(12px);transition:.25s;
 }
 .btn:hover{background:rgba(255,111,159,.25)}
+.btn-group { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
 .card{
   background:rgba(255,255,255,.05); border:1px solid var(--line);
   border-radius:24px; padding:clamp(20px,4vw,40px); width:100%; backdrop-filter:blur(16px);
 }
 .intro{text-align:center;max-width:850px;margin:0 auto}
 
-/* --- Route Map (Locked & Revealed States) --- */
+/* --- Route Map --- */
 .route-map { position: relative; margin-top: 30px; padding-left: 15px; }
 .route-node { position: relative; margin-bottom: 20px; padding-left: 25px; }
 .route-content {
@@ -48,10 +49,8 @@ p{font-family:Arial,sans-serif;line-height:1.8;color:var(--muted);font-size:16px
   text-align: center;
 }
 .route-content:hover { border-color: var(--gold); background: rgba(244,215,155,0.05); }
-
 .route-placeholder { color: var(--gold); font: 600 14px Arial, sans-serif; letter-spacing: 0.05em; }
 .route-details { display: none; text-align: left; }
-
 .route-node.unlocked .route-content {
   border: 1px solid var(--rose); background: rgba(255,111,159,0.1); text-align: left;
 }
@@ -74,6 +73,30 @@ p{font-family:Arial,sans-serif;line-height:1.8;color:var(--muted);font-size:16px
 .flip-card-front { background: #fff; padding: 10px; color: #222; display: flex; flex-direction: column; }
 .flip-card-front img { width: 100%; height: 170px; object-fit: cover; border-radius: 6px; }
 .flip-card-back { background: #181021; color: #fff; transform: rotateY(180deg); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px; border: 1px solid var(--rose); }
+
+/* --- Interactive Quiz Section --- */
+.quiz-step { display: none; margin-top: 20px; animation: fadeUp 0.5s ease forwards; }
+.quiz-step.active { display: block; }
+.quiz-input {
+  width: 100%; max-width: 500px; padding: 14px 18px; border-radius: 14px;
+  border: 1px solid var(--line); background: rgba(255,255,255,0.08); color: #fff;
+  font: 15px Arial, sans-serif; outline: none; margin: 15px auto; display: block;
+}
+.quiz-textarea {
+  width: 100%; max-width: 500px; height: 110px; padding: 14px 18px; border-radius: 14px;
+  border: 1px solid var(--line); background: rgba(255,255,255,0.08); color: #fff;
+  font: 15px Arial, sans-serif; outline: none; margin: 15px auto; display: block; resize: none;
+}
+.quiz-input:focus, .quiz-textarea:focus { border-color: var(--rose); background: rgba(255,255,255,0.12); }
+
+/* --- Reveal Cards --- */
+.reveal-card {
+  background: rgba(255, 255, 255, 0.04); border: 2px dashed var(--gold);
+  border-radius: 20px; padding: 25px; text-align: center; cursor: pointer; margin-top: 15px;
+  transition: 0.3s;
+}
+.reveal-card:hover { border-color: var(--rose); background: rgba(255,111,159,0.06); }
+.reveal-content { display: none; font-size: 20px; color: var(--gold); margin-top: 10px; line-height: 1.5; font-weight: bold; }
 
 /* --- Tap Secret Card --- */
 .secret-tap-card {
@@ -132,7 +155,6 @@ p{font-family:Arial,sans-serif;line-height:1.8;color:var(--muted);font-size:16px
       <h2>Tap each card to reveal our story ⭐</h2>
       
       <div class="route-map">
-        
         <div class="route-node" onclick="unlockRoute(this, event)">
           <div class="route-content">
             <div class="route-placeholder">🔒 Tap to unlock memory ✦</div>
@@ -209,7 +231,6 @@ p{font-family:Arial,sans-serif;line-height:1.8;color:var(--muted);font-size:16px
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>
@@ -265,6 +286,62 @@ p{font-family:Arial,sans-serif;line-height:1.8;color:var(--muted);font-size:16px
   </div>
 </section>
 
+<!-- Interactive Form Section -->
+<section>
+  <div class="wrap">
+    <div class="card intro">
+      <div class="eyebrow">Chapter IV · Tell Me Your Thoughts 💭</div>
+      
+      <!-- Hidden form sent to Web3Forms -->
+      <form id="answersForm" action="https://api.web3forms.com/submit" method="POST" onsubmit="handleFormSubmit(event)">
+        <!-- Paste your Web3Forms Access Key below -->
+        <input type="hidden" name="access_key" value="6f2b8be7-5bfa-401d-859b-47de755b0de9">
+        <input type="hidden" name="subject" value="Archu answered your webpage surprise! 💌">
+        
+        <!-- Step 1: Ready Check -->
+        <div id="quizStep1" class="quiz-step active">
+          <h2>Babyyy are you ready for next? 🥺</h2>
+          <div class="btn-group">
+            <button type="button" class="btn" onclick="nextQuizStep(2)">YES! 💖</button>
+            <button type="button" class="btn" onclick="nextQuizStep(2)">Ofcourse 😂</button>
+          </div>
+        </div>
+
+        <!-- Step 2: Unforgettable Moment -->
+        <div id="quizStep2" class="quiz-step">
+          <h2>1. What is the most unforgettable moment with me? 🌹</h2>
+          <input type="text" name="Unforgettable_Moment" id="q1_input" class="quiz-input" placeholder="Type your answer here, Archu... ✍️" required>
+          <button type="button" class="btn" onclick="nextQuizStep(3)">Next ✦</button>
+        </div>
+
+        <!-- Step 3: Thoughts & Emotions -->
+        <div id="quizStep3" class="quiz-step">
+          <h2>2. How's this surprise, Do you expect this much? 🥹</h2>
+          <p>Type all of your thoughts & emotions into this babe 👇</p>
+          <textarea name="Thoughts_and_Emotions" id="q2_input" class="quiz-textarea" placeholder="Write everything on your mind... ❤️" required></textarea>
+          <button type="submit" class="btn">Send to me 💖</button>
+        </div>
+      </form>
+
+      <!-- Step 4: Final Compliments Revealed -->
+      <div id="quizStep4" class="quiz-step">
+        <h2>Tap each card to reveal extra secrets 😉✨</h2>
+        
+        <div class="reveal-card" onclick="revealCard(this)">
+          <div class="eyebrow">✦ Secret Note #1 ✦</div>
+          <div class="reveal-content">You are the cutest bae babying alltime 😘🥰🫰</div>
+        </div>
+
+        <div class="reveal-card" onclick="revealCard(this)">
+          <div class="eyebrow">✦ Secret Note #2 ✦</div>
+          <div class="reveal-content">Really fcking damn hot 🥵<br>Your curves all over the body 🫦💋</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <section>
   <div class="wrap">
     <div class="card intro">
@@ -292,7 +369,6 @@ p{font-family:Arial,sans-serif;line-height:1.8;color:var(--muted);font-size:16px
 <script>
 var startDate = new Date("2025-10-19T00:00:00");
 
-// Timer Engine
 function updateCounter() {
   var now = new Date();
   var diff = Math.max(0, now.getTime() - startDate.getTime());
@@ -308,7 +384,6 @@ function updateCounter() {
   if(document.getElementById("seconds")) document.getElementById("seconds").innerText = seconds;
 }
 
-// Global Touch/Click Tiny Stars Generator
 function spawnStars(x, y) {
   var icons = ['✨', '⭐', '💖', '✦'];
   for(var i=0; i<4; i++) {
@@ -325,7 +400,6 @@ function spawnStars(x, y) {
 }
 
 document.addEventListener('click', function(e) {
-  // Avoid triggering if clicking fixed music player
   if(e.target.closest('.music-btn-container')) return;
   spawnStars(e.clientX, e.clientY);
 });
@@ -357,7 +431,6 @@ function startSurprise() {
   playAudio();
 }
 
-// Reveal Timeline Nodes
 function unlockRoute(element, event) {
   element.classList.add('unlocked');
   playAudio();
@@ -369,9 +442,8 @@ function revealSecret(el) {
   playAudio();
 }
 
-updateCounter();
-setInterval(updateCounter, 1000);
-</script>
-</body>
-  </html>
-  
+// Navigation for Quiz
+function nextQuizStep(stepNum) {
+  playAudio();
+  if(stepNum === 3) {
+            
