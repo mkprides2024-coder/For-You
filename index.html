@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>For Archu — A Little Universe</title>
+
 <style>
 :root{
   --bg:#0c0811; --panel:rgba(255,255,255,.075); --line:rgba(255,255,255,.14);
@@ -33,38 +34,49 @@ p{font-family:Arial,sans-serif;line-height:1.8;color:var(--muted);font-size:16px
   cursor:pointer;backdrop-filter:blur(12px);transition:.25s;
 }
 .btn:hover{background:rgba(255,111,159,.25)}
-.btn-group { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
 .card{
   background:rgba(255,255,255,.05); border:1px solid var(--line);
   border-radius:24px; padding:clamp(20px,4vw,40px); width:100%; backdrop-filter:blur(16px);
 }
 .intro{text-align:center;max-width:850px;margin:0 auto}
 
+/* --- Interactive Question Sequence --- */
+.interactive-container { text-align: center; max-width: 650px; margin: 0 auto; }
+.btn-group { display: flex; justify-content: center; gap: 15px; margin-top: 25px; flex-wrap: wrap; }
+.answer-input {
+  width: 100%; height: 120px; border-radius: 16px; border: 1px solid var(--line);
+  background: rgba(0, 0, 0, 0.3); color: #fff; padding: 15px; font-family: Arial, sans-serif;
+  font-size: 15px; resize: none; margin-top: 15px; outline: none;
+}
+.answer-input:focus { border-color: var(--rose); }
+
+/* --- Compliment Cards --- */
+.compliment-box {
+  background: rgba(255, 255, 255, 0.04); border: 1px dashed var(--gold);
+  border-radius: 18px; padding: 25px; margin-top: 20px; cursor: pointer; text-align: center;
+  transition: 0.3s;
+}
+.compliment-box:hover { border-color: var(--rose); background: rgba(255, 111, 159, 0.08); }
+.compliment-text { display: none; font-size: 22px; color: #fff; margin-top: 10px; line-height: 1.4; }
+
 /* --- Route Map --- */
 .route-map { position: relative; margin-top: 30px; padding-left: 15px; }
 .route-node { position: relative; margin-bottom: 20px; padding-left: 25px; }
 .route-content {
   background: rgba(255,255,255,0.04); border: 1px dashed var(--line);
-  border-radius: 14px; padding: 18px; cursor: pointer; transition: 0.3s;
-  text-align: center;
+  border-radius: 14px; padding: 18px; cursor: pointer; transition: 0.3s; text-align: center;
 }
-.route-content:hover { border-color: var(--gold); background: rgba(244,215,155,0.05); }
-.route-placeholder { color: var(--gold); font: 600 14px Arial, sans-serif; letter-spacing: 0.05em; }
+.route-placeholder { color: var(--gold); font: 600 14px Arial, sans-serif; }
 .route-details { display: none; text-align: left; }
-.route-node.unlocked .route-content {
-  border: 1px solid var(--rose); background: rgba(255,111,159,0.1); text-align: left;
-}
+.route-node.unlocked .route-content { border: 1px solid var(--rose); background: rgba(255,111,159,0.1); text-align: left; }
 .route-node.unlocked .route-placeholder { display: none; }
 .route-node.unlocked .route-details { display: block; animation: fadeUp 0.4s ease forwards; }
 
-/* --- Timer --- */
+/* --- Timer & Polaroids --- */
 .timer-container { display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
 .timer-box { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--line); padding: 10px 16px; border-radius: 12px; text-align: center; }
 .timer-num { font-size: 22px; font-weight: bold; color: var(--gold); font-family: Arial, sans-serif; }
 .timer-label { font-size: 9px; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
-.forever-badge { display: none; font-size: 28px; color: var(--rose); font-weight: bold; text-align: center; margin-top: 20px; }
-
-/* --- Polaroids --- */
 .gallery { display: flex; justify-content: center; gap: 20px; margin-top: 30px; flex-wrap: wrap; }
 .flip-card { background-color: transparent; width: 190px; height: 250px; cursor: pointer; perspective: 1000px; }
 .flip-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 0.6s; transform-style: preserve-3d; }
@@ -74,40 +86,8 @@ p{font-family:Arial,sans-serif;line-height:1.8;color:var(--muted);font-size:16px
 .flip-card-front img { width: 100%; height: 170px; object-fit: cover; border-radius: 6px; }
 .flip-card-back { background: #181021; color: #fff; transform: rotateY(180deg); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 15px; border: 1px solid var(--rose); }
 
-/* --- Interactive Quiz Section --- */
-.quiz-step { display: none; margin-top: 20px; animation: fadeUp 0.5s ease forwards; }
-.quiz-step.active { display: block; }
-.quiz-input {
-  width: 100%; max-width: 500px; padding: 14px 18px; border-radius: 14px;
-  border: 1px solid var(--line); background: rgba(255,255,255,0.08); color: #fff;
-  font: 15px Arial, sans-serif; outline: none; margin: 15px auto; display: block;
-}
-.quiz-textarea {
-  width: 100%; max-width: 500px; height: 110px; padding: 14px 18px; border-radius: 14px;
-  border: 1px solid var(--line); background: rgba(255,255,255,0.08); color: #fff;
-  font: 15px Arial, sans-serif; outline: none; margin: 15px auto; display: block; resize: none;
-}
-.quiz-input:focus, .quiz-textarea:focus { border-color: var(--rose); background: rgba(255,255,255,0.12); }
-
-/* --- Reveal Cards --- */
-.reveal-card {
-  background: rgba(255, 255, 255, 0.04); border: 2px dashed var(--gold);
-  border-radius: 20px; padding: 25px; text-align: center; cursor: pointer; margin-top: 15px;
-  transition: 0.3s;
-}
-.reveal-card:hover { border-color: var(--rose); background: rgba(255,111,159,0.06); }
-.reveal-content { display: none; font-size: 20px; color: var(--gold); margin-top: 10px; line-height: 1.5; font-weight: bold; }
-
-/* --- Tap Secret Card --- */
-.secret-tap-card {
-  background: rgba(255, 255, 255, 0.04); border: 2px dashed var(--gold);
-  border-radius: 20px; padding: 30px; text-align: center; cursor: pointer; margin-top: 20px;
-}
-.secret-text { display: none; margin-top: 15px; font-size: 22px; color: #fff; line-height: 1.4; }
-
-/* --- Global Pop Effects --- */
 .star-particle { position: fixed; pointer-events: none; font-size: 18px; animation: starPop 1.1s ease-out forwards; z-index: 9999; }
-@keyframes starPop { 0%{ transform: scale(0.2) rotate(0deg); opacity: 1; } 100%{ transform: scale(1.8) translateY(-50px) rotate(180deg); opacity: 0; } }
+@keyframes starPop { 0%{ transform: scale(0.2); opacity: 1; } 100%{ transform: scale(1.8) translateY(-50px); opacity: 0; } }
 @keyframes fadeUp { from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:translateY(0); } }
 
 .music-btn-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
@@ -143,7 +123,6 @@ p{font-family:Arial,sans-serif;line-height:1.8;color:var(--muted);font-size:16px
         <div class="timer-box"><div class="timer-num" id="minutes">0</div><div class="timer-label">Mins</div></div>
         <div class="timer-box"><div class="timer-num" id="seconds">0</div><div class="timer-label">Secs</div></div>
       </div>
-      <div id="foreverBadge" class="forever-badge">Infinitely forever ♾️✨</div>
     </div>
   </div>
 </section>
@@ -236,6 +215,57 @@ p{font-family:Arial,sans-serif;line-height:1.8;color:var(--muted);font-size:16px
   </div>
 </section>
 
+<!-- Interactive Q&A Sequence -->
+<section>
+  <div class="wrap">
+    <div class="card interactive-container">
+      
+      <!-- Stage 0: Initial Question -->
+      <div id="qa-stage-0">
+        <h2>Babyyy are you ready for next? 😉</h2>
+        <div class="btn-group">
+          <button class="btn" onclick="nextStage(1)">YES</button>
+          <button class="btn" onclick="nextStage(1)">Ofcourse 😂</button>
+        </div>
+      </div>
+
+      <!-- Stage 1: First Question -->
+      <div id="qa-stage-1" style="display:none;">
+        <div class="eyebrow">Question 1 of 2 💭</div>
+        <h2>What is the most unforgettable moment with me? ❤️</h2>
+        <textarea id="ans1" class="answer-input" placeholder="Type your thoughts here, babe..."></textarea>
+        <button class="btn" style="margin-top:20px;" onclick="nextStage(2)">Next Question ✦</button>
+      </div>
+
+      <!-- Stage 2: Second Question -->
+      <div id="qa-stage-2" style="display:none;">
+        <div class="eyebrow">Question 2 of 2 🌸</div>
+        <h2>How's this surprise, Do you expect this much?</h2>
+        <p style="font-size:14px;margin-top:5px;">Type all of your thoughts & emotions into this babe. ✨</p>
+        <textarea id="ans2" class="answer-input" placeholder="Tell me everything..."></textarea>
+        <button class="btn" id="submitBtn" style="margin-top:20px;" onclick="sendWeb3Forms()">Submit to Me 💌</button>
+      </div>
+
+      <!-- Stage 3: Tap to Reveal Compliments -->
+      <div id="qa-stage-3" style="display:none;">
+        <div class="eyebrow">A Little Secret For You 💋</div>
+        <h2>Tap each box to reveal 🫣</h2>
+
+        <div class="compliment-box" onclick="revealCompliment(this)">
+          <div class="compliment-placeholder">✨ Tap to reveal compliment #1 ✨</div>
+          <div class="compliment-text">You are the cutest bae babying alltime 😘🥰🫰</div>
+        </div>
+
+        <div class="compliment-box" onclick="revealCompliment(this)">
+          <div class="compliment-placeholder">🔥 Tap to reveal compliment #2 🔥</div>
+          <div class="compliment-text">Really fcking damn hot 🥵<br>Your curves all over the body 🫦💋</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
 <section>
   <div class="wrap">
     <div class="card">
@@ -286,79 +316,6 @@ p{font-family:Arial,sans-serif;line-height:1.8;color:var(--muted);font-size:16px
   </div>
 </section>
 
-<!-- Interactive Form Section -->
-<section>
-  <div class="wrap">
-    <div class="card intro">
-      <div class="eyebrow">Chapter IV · Tell Me Your Thoughts 💭</div>
-      
-      <!-- Hidden form sent to Web3Forms -->
-      <form id="answersForm" action="https://api.web3forms.com/submit" method="POST" onsubmit="handleFormSubmit(event)">
-        <!-- Paste your Web3Forms Access Key below -->
-        <input type="hidden" name="access_key" value="6f2b8be7-5bfa-401d-859b-47de755b0de9">
-        <input type="hidden" name="subject" value="Archu answered your webpage surprise! 💌">
-        
-        <!-- Step 1: Ready Check -->
-        <div id="quizStep1" class="quiz-step active">
-          <h2>Babyyy are you ready for next? 🥺</h2>
-          <div class="btn-group">
-            <button type="button" class="btn" onclick="nextQuizStep(2)">YES! 💖</button>
-            <button type="button" class="btn" onclick="nextQuizStep(2)">Ofcourse 😂</button>
-          </div>
-        </div>
-
-        <!-- Step 2: Unforgettable Moment -->
-        <div id="quizStep2" class="quiz-step">
-          <h2>1. What is the most unforgettable moment with me? 🌹</h2>
-          <input type="text" name="Unforgettable_Moment" id="q1_input" class="quiz-input" placeholder="Type your answer here, Archu... ✍️" required>
-          <button type="button" class="btn" onclick="nextQuizStep(3)">Next ✦</button>
-        </div>
-
-        <!-- Step 3: Thoughts & Emotions -->
-        <div id="quizStep3" class="quiz-step">
-          <h2>2. How's this surprise, Do you expect this much? 🥹</h2>
-          <p>Type all of your thoughts & emotions into this babe 👇</p>
-          <textarea name="Thoughts_and_Emotions" id="q2_input" class="quiz-textarea" placeholder="Write everything on your mind... ❤️" required></textarea>
-          <button type="submit" class="btn">Send to me 💖</button>
-        </div>
-      </form>
-
-      <!-- Step 4: Final Compliments Revealed -->
-      <div id="quizStep4" class="quiz-step">
-        <h2>Tap each card to reveal extra secrets 😉✨</h2>
-        
-        <div class="reveal-card" onclick="revealCard(this)">
-          <div class="eyebrow">✦ Secret Note #1 ✦</div>
-          <div class="reveal-content">You are the cutest bae babying alltime 😘🥰🫰</div>
-        </div>
-
-        <div class="reveal-card" onclick="revealCard(this)">
-          <div class="eyebrow">✦ Secret Note #2 ✦</div>
-          <div class="reveal-content">Really fcking damn hot 🥵<br>Your curves all over the body 🫦💋</div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<section>
-  <div class="wrap">
-    <div class="card intro">
-      <div class="eyebrow">One last secret 🔒</div>
-      <h2>Tap to reveal your note ✨</h2>
-      <div class="secret-tap-card" onclick="revealSecret(this)">
-        <div id="tapPrompt">✨ Tap here to reveal secret message ✨</div>
-        <div class="secret-text" id="secretNote">
-          I love you before the universe began, and I want that feeling to outlast every ending 🌌.<br><br>
-          When I close my eyes, my thoughts still find you. When I open them, little pieces of you are everywhere ✨.<br><br>
-          <span style="color:var(--gold);font-style:italic">— Kichu / Daada / Hubby / Daddy ❤️</span>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <div class="music-btn-container">
   <audio id="bg-music" loop>
     <source src="I Wanna Be Yours(MP3_320K).mp3" type="audio/mpeg">
@@ -367,6 +324,9 @@ p{font-family:Arial,sans-serif;line-height:1.8;color:var(--muted);font-size:16px
 </div>
 
 <script>
+// REPLACE WITH YOUR WEB3FORMS ACCESS KEY
+const WEB3FORMS_ACCESS_KEY = "6f2b8be7-5bfa-401d-859b-47de755b0de9";
+
 var startDate = new Date("2025-10-19T00:00:00");
 
 function updateCounter() {
@@ -384,6 +344,49 @@ function updateCounter() {
   if(document.getElementById("seconds")) document.getElementById("seconds").innerText = seconds;
 }
 
+// Stage Progression Logic
+function nextStage(stage) {
+  playAudio();
+  document.getElementById('qa-stage-0').style.display = 'none';
+  document.getElementById('qa-stage-1').style.display = 'none';
+  document.getElementById('qa-stage-2').style.display = 'none';
+  document.getElementById('qa-stage-3').style.display = 'none';
+
+  document.getElementById('qa-stage-' + stage).style.display = 'block';
+}
+
+function sendWeb3Forms() {
+  var q1Ans = document.getElementById('ans1').value;
+  var q2Ans = document.getElementById('ans2').value;
+  var submitBtn = document.getElementById('submitBtn');
+
+  submitBtn.innerText = "Sending... 💌";
+
+  var formData = new FormData();
+  formData.append("access_key", WEB3FORMS_ACCESS_KEY);
+  formData.append("subject", "New Response from Archu! 💖");
+  formData.append("1_Unforgettable_Moment", q1Ans);
+  formData.append("2_Surprise_Feedback", q2Ans);
+
+  fetch("https://api.web3forms.com/submit", {
+    method: "POST",
+    body: formData
+  })
+  .then(function(res) {
+    nextStage(3);
+  })
+  .catch(function(err) {
+    console.log("Error sending response", err);
+    nextStage(3); // Progress anyway so experience doesn't break for her
+  });
+}
+
+function revealCompliment(el) {
+  el.querySelector('.compliment-placeholder').style.display = 'none';
+  el.querySelector('.compliment-text').style.display = 'block';
+  playAudio();
+}
+
 function spawnStars(x, y) {
   var icons = ['✨', '⭐', '💖', '✦'];
   for(var i=0; i<4; i++) {
@@ -393,14 +396,12 @@ function spawnStars(x, y) {
     star.style.left = (x + (Math.random()*40 - 20)) + 'px';
     star.style.top = (y + (Math.random()*40 - 20)) + 'px';
     document.body.appendChild(star);
-    (function(s){
-      setTimeout(function(){ s.remove(); }, 1100);
-    })(star);
+    (function(s){ setTimeout(function(){ s.remove(); }, 1100); })(star);
   }
 }
 
 document.addEventListener('click', function(e) {
-  if(e.target.closest('.music-btn-container')) return;
+  if(e.target.closest('.music-btn-container') || e.target.tagName === 'TEXTAREA') return;
   spawnStars(e.clientX, e.clientY);
 });
 
@@ -436,14 +437,8 @@ function unlockRoute(element, event) {
   playAudio();
 }
 
-function revealSecret(el) {
-  document.getElementById('tapPrompt').style.display = 'none';
-  document.getElementById('secretNote').style.display = 'block';
-  playAudio();
-}
-
-// Navigation for Quiz
-function nextQuizStep(stepNum) {
-  playAudio();
-  if(stepNum === 3) {
-            
+updateCounter();
+setInterval(updateCounter, 1000);
+</script>
+</body>
+</html>
