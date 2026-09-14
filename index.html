@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#120b18">
-<title>For Archu — My Universe</title>
+<title>For Archu — A Little Universe</title>
 <style>
 :root{
   --bg:#0c0811; --panel:rgba(255,255,255,.075); --line:rgba(255,255,255,.14);
@@ -43,9 +43,9 @@ p{font-family:Arial,sans-serif;line-height:1.8;color:var(--muted);font-size:16px
 .card{
   background:linear-gradient(145deg,rgba(255,255,255,.10),rgba(255,255,255,.035));
   border:1px solid var(--line); border-radius:30px; padding:clamp(24px,5vw,52px);
-  box-shadow:0 30px 100px rgba(0,0,0,.28); backdrop-filter:blur(16px);
+  box-shadow:0 30px 100px rgba(0,0,0,.28); backdrop-filter:blur(16px); width:100%;
 }
-.intro{text-align:center;max-width:850px}
+.intro{text-align:center;max-width:850px;margin:0 auto}
 .quote{font-size:clamp(24px,4vw,42px);line-height:1.35;color:#fff;margin:25px auto}
 .signature{color:var(--gold);font-style:italic;font-size:20px}
 
@@ -54,7 +54,6 @@ p{font-family:Arial,sans-serif;line-height:1.8;color:var(--muted);font-size:16px
 .route-map::before {
   content: ''; position: absolute; left: 10px; top: 15px; bottom: 15px;
   width: 2px; background: linear-gradient(to bottom, var(--rose), var(--gold));
-  border-dash: 4px;
 }
 .route-node { position: relative; margin-bottom: 25px; padding-left: 30px; }
 .route-pin {
@@ -107,15 +106,15 @@ figcaption { padding-top: 8px; font: 600 11px Arial, sans-serif; color: #333; }
 #jarNote { font-style: italic; font-size: 18px; color: var(--gold); min-height: 50px; display: flex; align-items: center; justify-content: center; }
 
 /* --- Scratch Card --- */
-.scratch-container { position: relative; width: 100%; max-width: 700px; margin: 30px auto; border-radius: 20px; overflow: hidden; border: 1px solid var(--line); }
-#scratchCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; cursor: pointer; }
+.scratch-container { position: relative; width: 100%; min-height: 250px; margin: 30px auto; border-radius: 20px; overflow: hidden; border: 1px solid var(--line); }
+#scratchCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; cursor: pointer; touch-action: none; }
 .hidden-letter { padding: 40px; background: rgba(255,255,255,0.03); text-align: center; }
 
 .reveal { text-align: center; }
 .lock { font-size: 50px; margin-bottom: 14px; }
-.final { font-size: clamp(22px, 4vw, 38px); line-height: 1.3; color: #fff; margin: 25px auto; }
+.final { font-size: clamp(20px, 3.5vw, 32px); line-height: 1.4; color: #fff; margin: 15px auto; }
 .footer { text-align: center; color: #8e818a; font: 11px Arial, sans-serif; letter-spacing: .08em; }
-.star-particle { position: fixed; pointer-events: none; font-size: 16px; animation: starPop 1.2s ease-out forwards; z-index: 100; }
+.star-particle { position: fixed; pointer-events: none; font-size: 20px; animation: starPop 1.2s ease-out forwards; z-index: 9999; }
 .heart { position: fixed; bottom: -30px; font-size: 18px; pointer-events: none; animation: float 5s linear forwards; z-index: 5; }
 
 .music-btn-container { position: fixed; bottom: 25px; right: 25px; z-index: 1000; }
@@ -360,56 +359,56 @@ figcaption { padding-top: 8px; font: 600 11px Arial, sans-serif; color: #333; }
 const text = "Archu.";
 let index = 0;
 function typeWriter() {
-  if (index < text.length) {
-    document.getElementById("typewriter").innerHTML += text.charAt(index);
+  const el = document.getElementById("typewriter");
+  if (el && index < text.length) {
+    el.innerHTML += text.charAt(index);
     index++;
     setTimeout(typeWriter, 200);
   }
 }
 
-// Relationship Start Counter: October 19, 2025
-const relationshipStart = new Date("2025-10-19T00:00:00");
+// Fixed Relationship Start Counter (October 19, 2025)
+const relationshipStart = new Date(2025, 9, 19); // 0-indexed month (9 = Oct)
 let timerCount = 0;
 
 function updateCounter() {
   const now = new Date();
-  const diff = now - relationshipStart;
+  const diff = Math.max(0, now - relationshipStart);
 
   const days = Math.floor(diff / (1000 * 60 * 60 * 24));
   const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
   const minutes = Math.floor((diff / (1000 * 60)) % 60);
   const seconds = Math.floor((diff / 1000) % 60);
 
-  document.getElementById("days").innerText = days;
-  document.getElementById("hours").innerText = hours;
-  document.getElementById("minutes").innerText = minutes;
-  document.getElementById("seconds").innerText = seconds;
+  if(document.getElementById("days")) document.getElementById("days").innerText = days;
+  if(document.getElementById("hours")) document.getElementById("hours").innerText = hours;
+  if(document.getElementById("minutes")) document.getElementById("minutes").innerText = minutes;
+  if(document.getElementById("seconds")) document.getElementById("seconds").innerText = seconds;
 
   timerCount++;
-  // After ~7 seconds, transition to Infinitely Forever ♾️
-  if(timerCount > 7) {
-    document.getElementById("timerWrapper").style.display = "none";
-    document.getElementById("foreverBadge").style.display = "block";
+  // Transition to Infinitely Forever after 5 seconds
+  if(timerCount > 5) {
+    const tw = document.getElementById("timerWrapper");
+    const fb = document.getElementById("foreverBadge");
+    if(tw) tw.style.display = "none";
+    if(fb) fb.style.display = "block";
   }
 }
 
-window.onload = function() {
-  typeWriter();
-  initScratchCard();
-  setInterval(updateCounter, 1000);
-  updateCounter();
-};
-
-// Route Map Unlock + Star Burst
+// Star Burst Handler
 function unlockRoute(element, event) {
   element.classList.add('unlocked');
   playAudio();
+  
+  const clickX = event.clientX || (event.touches && event.touches[0].clientX) || window.innerWidth/2;
+  const clickY = event.clientY || (event.touches && event.touches[0].clientY) || window.innerHeight/2;
+
   for(let i=0; i<8; i++) {
     const star = document.createElement('div');
     star.className = 'star-particle';
     star.textContent = ['⭐','✦','✨','💖'][Math.floor(Math.random()*4)];
-    star.style.left = (event.clientX + (Math.random()*40 - 20)) + 'px';
-    star.style.top = (event.clientY + (Math.random()*40 - 20)) + 'px';
+    star.style.left = (clickX + (Math.random()*60 - 30)) + 'px';
+    star.style.top = (clickY + (Math.random()*60 - 30)) + 'px';
     document.body.appendChild(star);
     setTimeout(() => star.remove(), 1200);
   }
@@ -424,20 +423,21 @@ const notes = [
   "The cute baby-talk moments that make my whole day better 🥺.",
   "That unforgettable birthday kiss on Nov 17 💋✨."
 ];
+
 function pullNote() {
   const randomNote = notes[Math.floor(Math.random() * notes.length)];
   document.getElementById("jarNote").innerText = randomNote;
   triggerHearts();
 }
 
-// Audio Player Controls
+// Audio Controls
 function playAudio() {
   const music = document.getElementById('bg-music');
   const btn = document.getElementById('musicToggleBtn');
-  if (music.paused) {
+  if (music && music.paused) {
     music.play().then(() => {
-      btn.innerHTML = '⏸ Pause Music';
-    }).catch(e => console.log(e));
+      if(btn) btn.innerHTML = '⏸ Pause Music';
+    }).catch(e => console.log("Audio waiting for user gesture"));
   }
 }
 
@@ -454,21 +454,6 @@ function toggleAudio() {
 }
 
 function startSurprise() {
-  document.getElementById('chapter').scrollIntoView();
-  playAudio();
-}
-
-// Scratch Card Logic
-function initScratchCard() {
-  const canvas = document.getElementById('scratchCanvas');
-  const ctx = canvas.getContext('2d');
-  const container = document.getElementById('scratchContainer');
-
-  canvas.width = container.offsetWidth;
-  canvas.height = container.offsetHeight;
-
-  ctx.fillStyle = '#2c2236';
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  const el = document.getElementById('chapter');
+  if(el) el.scrollIntoView({ behavior: 'smooth' });
   
-  ctx.font = '20px Arial';
-  ctx.fillSty
