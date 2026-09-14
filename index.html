@@ -322,7 +322,58 @@ p{font-family:Arial,sans-serif;line-height:1.8;color:var(--muted);font-size:16px
     </div>
   </div>
 </section>
+<!-- Interactive Two-Part Game Section -->
+<section>
+  <div class="wrap">
+    <div class="card" style="text-align:center;">
+      <div class="eyebrow">Interactive Quest 🎮</div>
+      <h2>Unlock the Finale Ticket 🎟️</h2>
+      <p>Pass both challenges to unlock the final secret chapter!</p>
 
+      <!-- Part 1: Catch My Heart -->
+      <div id="game-part-1">
+        <div class="eyebrow">Part 1 of 2 · Catch My Heart ❤️</div>
+        <p>Tap 10 falling hearts to catch half of your ticket!</p>
+        <div style="font-size:20px; font-weight:bold; margin: 15px 0; color:var(--gold)">
+          Score: <span id="heartScore">0</span> / 10
+        </div>
+        <div id="gameArea" style="position:relative; width:100%; height:260px; background:rgba(0,0,0,0.3); border:1px dashed var(--line); border-radius:16px; overflow:hidden; touch-action:none;">
+          <div id="gameStartOverlay" style="position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background:rgba(12,8,17,0.85); z-index:5;">
+            <button class="btn" onclick="startHeartGame()">Start Catching Hearts 💖</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Part 2: Romantic Quiz -->
+      <div id="game-part-2" style="display:none;">
+        <div class="eyebrow" style="color:var(--gold);">🎟️ Half Ticket Unlocked! Part 2 of 2</div>
+        <h2>Now Prove How Well You Know Me 😜</h2>
+        
+        <div style="margin-top:20px; text-align:left;">
+          <label style="color:var(--gold); font-weight:bold;">1. Which food do I like the most? 😋</label>
+          <input type="text" id="quizAns1" class="answer-input" style="height:50px;" placeholder="Type your answer...">
+        </div>
+
+        <div style="margin-top:20px; text-align:left;">
+          <label style="color:var(--gold); font-weight:bold;">2. Which thing is my fav and I wish? 💫</label>
+          <input type="text" id="quizAns2" class="answer-input" style="height:50px;" placeholder="Type your answer...">
+        </div>
+
+        <button class="btn" style="margin-top:25px;" onclick="checkQuizAnswers()">Submit Answers & Claim Finale 🎟️</button>
+      </div>
+
+      <!-- Success Message -->
+      <div id="game-success" style="display:none;">
+        <div class="eyebrow" style="color:#6fffab;">🎉 Full Ticket Unlocked!</div>
+        <h2>You Did It, Baby! ❤️</h2>
+        <p id="owedPicsSummary" style="color:var(--gold); font-size:18px;"></p>
+        <p>Scroll down to reveal our final memory section... ✨</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+  
 <!-- Final Memory Section: Scratch & Flip -->
 <section>
   <div class="wrap">
@@ -514,7 +565,100 @@ function handleFinalCardClick() {
     playAudio();
   }
 }
+/* --- Game & Quiz Logic --- */
+var heartCount = 0;
+var gameActive = false;
+var owePicsCount = 0;
 
+function startHeartGame() {
+  heartCount = 0;
+  document.getElementById('heartScore').innerText = heartCount;
+  document.getElementById('gameStartOverlay').style.display = 'none';
+  gameActive = true;
+  spawnHeart();
+}
+
+function spawnHeart() {
+  if(!gameActive) return;
+  var gameArea = document.getElementById('gameArea');
+  var heart = document.createElement('div');
+  heart.innerHTML = '❤️';
+  heart.style.position = 'absolute';
+  heart.style.fontSize = '32px';
+  heart.style.cursor = 'pointer';
+  heart.style.userSelect = 'none';
+  
+  var maxX = gameArea.offsetWidth - 40;
+  var randomX = Math.floor(Math.random() * Math.max(maxX, 10));
+  heart.style.left = randomX + 'px';
+  heart.style.top = '-40px';
+
+  gameArea.appendChild(heart);
+
+  var fallInterval = setInterval(function(){
+    if(!gameActive) {
+      clearInterval(fallInterval);
+      heart.remove();
+      return;
+    }
+    var top = parseInt(heart.style.top);
+    if(top > gameArea.offsetHeight) {
+      clearInterval(fallInterval);
+      heart.remove();
+      spawnHeart();
+    } else {
+      heart.style.top = (top + 4) + 'px';
+    }
+  }, 20);
+
+  var catchEvent = function(e) {
+    e.stopPropagation();
+    clearInterval(fallInterval);
+    heart.remove();
+    heartCount++;
+    document.getElementById('heartScore').innerText = heartCount;
+    playAudio();
+
+    if(heartCount >= 10) {
+      gameActive = false;
+      alert("🎉 Half Way Ticket Unlocked! Now complete Part 2!");
+      document.getElementById('game-part-1').style.display = 'none';
+      document.getElementById('game-part-2').style.display = 'block';
+    } else {
+      spawnHeart();
+    }
+  };
+
+  heart.addEventListener('mousedown', catchEvent);
+  heart.addEventListener('touchstart', catchEvent);
+}
+
+function checkQuizAnswers() {
+  var ans1 = document.getElementById('quizAns1').value.trim().toLowerCase();
+  var ans2 = document.getElementById('quizAns2').value.trim().toLowerCase();
+
+  // Valid Answer Lists
+  var validFood = ["al faham mandhi", "alfaham mandhi", "al faham mandi", "pussy"];
+  var validWish = ["luxurious materials", "luxurious material", "rolls royce", "money", "clothes", "power"];
+
+  var isAns1Correct = validFood.some(function(v){ return ans1.includes(v); });
+  var isAns2Correct = validWish.some(function(v){ return ans2.includes(v); });
+
+  if(isAns1Correct && isAns2Correct) {
+    document.getElementById('game-part-2').style.display = 'none';
+    document.getElementById('game-success').style.display = 'block';
+    
+    if(owePicsCount > 0) {
+      document.getElementById('owedPicsSummary').innerText = "Notice: You owe me " + owePicsCount + " picture(s) for the wrong guesses! 📸😜";
+    } else {
+      document.getElementById('owedPicsSummary').innerText = "Perfect score! No owed pics! 😘";
+    }
+    playAudio();
+  } else {
+    owePicsCount++;
+    alert("❌ Wrong answer, babe! 😜\nYou owe me " + owePicsCount + " picture(s) now! Try again!");
+  }
+  }
 updateCounter();
 setInterval(updateCounter, 1000);
 </script>
