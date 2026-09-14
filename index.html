@@ -39,16 +39,24 @@ p{font-family:Arial,sans-serif;line-height:1.8;color:var(--muted);font-size:16px
 }
 .intro{text-align:center;max-width:850px;margin:0 auto}
 
-/* --- Route Map --- */
+/* --- Route Map (Locked & Revealed States) --- */
 .route-map { position: relative; margin-top: 30px; padding-left: 15px; }
 .route-node { position: relative; margin-bottom: 20px; padding-left: 25px; }
 .route-content {
-  background: rgba(255,255,255,0.04); border: 1px solid var(--line);
-  border-radius: 14px; padding: 15px; cursor: pointer; transition: 0.3s;
+  background: rgba(255,255,255,0.04); border: 1px dashed var(--line);
+  border-radius: 14px; padding: 18px; cursor: pointer; transition: 0.3s;
+  text-align: center;
 }
-.route-secret { display: none; margin-top: 8px; color: var(--gold); font-size: 14px; }
-.route-node.unlocked .route-secret { display: block; }
-.route-node.unlocked .route-content { border-color: var(--rose); background: rgba(255,111,159,0.1); }
+.route-content:hover { border-color: var(--gold); background: rgba(244,215,155,0.05); }
+
+.route-placeholder { color: var(--gold); font: 600 14px Arial, sans-serif; letter-spacing: 0.05em; }
+.route-details { display: none; text-align: left; }
+
+.route-node.unlocked .route-content {
+  border: 1px solid var(--rose); background: rgba(255,111,159,0.1); text-align: left;
+}
+.route-node.unlocked .route-placeholder { display: none; }
+.route-node.unlocked .route-details { display: block; animation: fadeUp 0.4s ease forwards; }
 
 /* --- Timer --- */
 .timer-container { display: flex; justify-content: center; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
@@ -74,8 +82,10 @@ p{font-family:Arial,sans-serif;line-height:1.8;color:var(--muted);font-size:16px
 }
 .secret-text { display: none; margin-top: 15px; font-size: 22px; color: #fff; line-height: 1.4; }
 
-.star-particle { position: fixed; pointer-events: none; font-size: 20px; animation: starPop 1.2s ease-out forwards; z-index: 9999; }
-@keyframes starPop { 0%{ transform: scale(0); opacity: 1; } 100%{ transform: scale(2) translateY(-60px); opacity: 0; } }
+/* --- Global Pop Effects --- */
+.star-particle { position: fixed; pointer-events: none; font-size: 18px; animation: starPop 1.1s ease-out forwards; z-index: 9999; }
+@keyframes starPop { 0%{ transform: scale(0.2) rotate(0deg); opacity: 1; } 100%{ transform: scale(1.8) translateY(-50px) rotate(180deg); opacity: 0; } }
+@keyframes fadeUp { from{ opacity:0; transform:translateY(8px); } to{ opacity:1; transform:translateY(0); } }
 
 .music-btn-container { position: fixed; bottom: 20px; right: 20px; z-index: 1000; }
 .music-btn { border: 1px solid var(--line); background: #181021; color: var(--gold); border-radius: 999px; padding: 12px 18px; font: 600 13px Arial, sans-serif; cursor: pointer; }
@@ -119,64 +129,87 @@ p{font-family:Arial,sans-serif;line-height:1.8;color:var(--muted);font-size:16px
   <div class="wrap">
     <div class="card">
       <div class="eyebrow">Chapter II · Our Story Route Map 🗺️</div>
-      <h2>Tap each date to unlock our path ⭐</h2>
+      <h2>Tap each card to reveal our story ⭐</h2>
       
       <div class="route-map">
+        
         <div class="route-node" onclick="unlockRoute(this, event)">
           <div class="route-content">
-            <div class="eyebrow">14th Aug 2025 👀</div>
-            <h3 style="margin:5px 0">First Met</h3>
-            <div class="route-secret">Two strangers, completely unaware of how much space we'd occupy in each other's hearts 💫.</div>
+            <div class="route-placeholder">🔒 Tap to unlock memory ✦</div>
+            <div class="route-details">
+              <div class="eyebrow">14th Aug 2025 👀</div>
+              <h3 style="margin:5px 0">First Met</h3>
+              <p style="margin:0">Two strangers, completely unaware of how much space we'd occupy in each other's hearts 💫.</p>
+            </div>
           </div>
         </div>
 
         <div class="route-node" onclick="unlockRoute(this, event)">
           <div class="route-content">
-            <div class="eyebrow">28th Sep 2025 💬</div>
-            <h3 style="margin:5px 0">First Deep Chat</h3>
-            <div class="route-secret">Hours felt like minutes as we started sharing our true selves 🌙.</div>
+            <div class="route-placeholder">🔒 Tap to unlock memory ✦</div>
+            <div class="route-details">
+              <div class="eyebrow">28th Sep 2025 💬</div>
+              <h3 style="margin:5px 0">First Deep Chat</h3>
+              <p style="margin:0">Hours felt like minutes as we started sharing our true selves 🌙.</p>
+            </div>
           </div>
         </div>
 
         <div class="route-node" onclick="unlockRoute(this, event)">
           <div class="route-content">
-            <div class="eyebrow">19th Oct 2025 💍</div>
-            <h3 style="margin:5px 0">The Proposal (Official Start!)</h3>
-            <div class="route-secret">I asked, you said yes 😉… and my whole world shifted forever ❤️.</div>
+            <div class="route-placeholder">🔒 Tap to unlock memory ✦</div>
+            <div class="route-details">
+              <div class="eyebrow">19th Oct 2025 💍</div>
+              <h3 style="margin:5px 0">The Proposal (Official Start!)</h3>
+              <p style="margin:0">I asked, you said yes 😉… and my whole world shifted forever ❤️.</p>
+            </div>
           </div>
         </div>
 
         <div class="route-node" onclick="unlockRoute(this, event)">
           <div class="route-content">
-            <div class="eyebrow">23rd Oct 2025 🥐</div>
-            <h3 style="margin:5px 0">First Outing @ Cinnamon Bakery</h3>
-            <div class="route-secret">Holding your tiny cute little hand for the very first time 🤏💕.</div>
+            <div class="route-placeholder">🔒 Tap to unlock memory ✦</div>
+            <div class="route-details">
+              <div class="eyebrow">23rd Oct 2025 🥐</div>
+              <h3 style="margin:5px 0">First Outing @ Cinnamon Bakery</h3>
+              <p style="margin:0">Holding your tiny cute little hand for the very first time 🤏💕.</p>
+            </div>
           </div>
         </div>
 
         <div class="route-node" onclick="unlockRoute(this, event)">
           <div class="route-content">
-            <div class="eyebrow">17th Nov 2025 💋</div>
-            <h3 style="margin:5px 0">First Kiss</h3>
-            <div class="route-secret">On my birthday… an intense, magical kiss that turned an ordinary date into magic ✨.</div>
+            <div class="route-placeholder">🔒 Tap to unlock memory ✦</div>
+            <div class="route-details">
+              <div class="eyebrow">17th Nov 2025 💋</div>
+              <h3 style="margin:5px 0">First Kiss</h3>
+              <p style="margin:0">On my birthday… an intense, magical kiss that turned an ordinary date into magic ✨.</p>
+            </div>
           </div>
         </div>
 
         <div class="route-node" onclick="unlockRoute(this, event)">
           <div class="route-content">
-            <div class="eyebrow">30th Mar 2026 🕯️</div>
-            <h3 style="margin:5px 0">Most Memorable Intimate Moment</h3>
-            <div class="route-secret">A private, unforgettable memory etched into our hearts forever 🫂.</div>
+            <div class="route-placeholder">🔒 Tap to unlock memory ✦</div>
+            <div class="route-details">
+              <div class="eyebrow">30th Mar 2026 🕯️</div>
+              <h3 style="margin:5px 0">Most Memorable Intimate Moment</h3>
+              <p style="margin:0">A private, unforgettable memory etched into our hearts forever 🫂.</p>
+            </div>
           </div>
         </div>
 
         <div class="route-node" onclick="unlockRoute(this, event)">
           <div class="route-content">
-            <div class="eyebrow">21st / 28th Aug 2026 🛍️</div>
-            <h3 style="margin:5px 0">Happiest Latest Memories @ Lulu Mall</h3>
-            <div class="route-secret">So much laughter and love... I truly didn't want you to leave 🥹❤️.</div>
+            <div class="route-placeholder">🔒 Tap to unlock memory ✦</div>
+            <div class="route-details">
+              <div class="eyebrow">21st / 28th Aug 2026 🛍️</div>
+              <h3 style="margin:5px 0">Happiest Latest Memories @ Lulu Mall</h3>
+              <p style="margin:0">So much laughter and love... I truly didn't want you to leave 🥹❤️.</p>
+            </div>
           </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -257,9 +290,9 @@ p{font-family:Arial,sans-serif;line-height:1.8;color:var(--muted);font-size:16px
 </div>
 
 <script>
-// Fixed Date Parsing String format
 var startDate = new Date("2025-10-19T00:00:00");
 
+// Timer Engine
 function updateCounter() {
   var now = new Date();
   var diff = Math.max(0, now.getTime() - startDate.getTime());
@@ -269,16 +302,33 @@ function updateCounter() {
   var minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
   var seconds = Math.floor((diff % (1000 * 60)) / 1000);
 
-  var dEl = document.getElementById("days");
-  var hEl = document.getElementById("hours");
-  var mEl = document.getElementById("minutes");
-  var sEl = document.getElementById("seconds");
-
-  if(dEl) dEl.innerText = days;
-  if(hEl) hEl.innerText = hours;
-  if(mEl) mEl.innerText = minutes;
-  if(sEl) sEl.innerText = seconds;
+  if(document.getElementById("days")) document.getElementById("days").innerText = days;
+  if(document.getElementById("hours")) document.getElementById("hours").innerText = hours;
+  if(document.getElementById("minutes")) document.getElementById("minutes").innerText = minutes;
+  if(document.getElementById("seconds")) document.getElementById("seconds").innerText = seconds;
 }
+
+// Global Touch/Click Tiny Stars Generator
+function spawnStars(x, y) {
+  var icons = ['✨', '⭐', '💖', '✦'];
+  for(var i=0; i<4; i++) {
+    var star = document.createElement('div');
+    star.className = 'star-particle';
+    star.textContent = icons[Math.floor(Math.random() * icons.length)];
+    star.style.left = (x + (Math.random()*40 - 20)) + 'px';
+    star.style.top = (y + (Math.random()*40 - 20)) + 'px';
+    document.body.appendChild(star);
+    (function(s){
+      setTimeout(function(){ s.remove(); }, 1100);
+    })(star);
+  }
+}
+
+document.addEventListener('click', function(e) {
+  // Avoid triggering if clicking fixed music player
+  if(e.target.closest('.music-btn-container')) return;
+  spawnStars(e.clientX, e.clientY);
+});
 
 function playAudio() {
   var music = document.getElementById('bg-music');
@@ -286,7 +336,7 @@ function playAudio() {
   if (music && music.paused) {
     music.play().then(function() {
       if(btn) btn.innerHTML = '⏸ Pause Music';
-    }).catch(function(e){ console.log("Audio waiting for touch event"); });
+    }).catch(function(e){});
   }
 }
 
@@ -307,21 +357,10 @@ function startSurprise() {
   playAudio();
 }
 
+// Reveal Timeline Nodes
 function unlockRoute(element, event) {
   element.classList.add('unlocked');
   playAudio();
-  var x = event.clientX || window.innerWidth/2;
-  var y = event.clientY || window.innerHeight/2;
-
-  for(var i=0; i<6; i++) {
-    var star = document.createElement('div');
-    star.className = 'star-particle';
-    star.textContent = ['⭐','✦','✨','💖'][Math.floor(Math.random()*4)];
-    star.style.left = (x + (Math.random()*40 - 20)) + 'px';
-    star.style.top = (y + (Math.random()*40 - 20)) + 'px';
-    document.body.appendChild(star);
-    setTimeout((function(s){ return function(){ s.remove(); }; })(star), 1200);
-  }
 }
 
 function revealSecret(el) {
@@ -330,7 +369,6 @@ function revealSecret(el) {
   playAudio();
 }
 
-// Start immediately on script load
 updateCounter();
 setInterval(updateCounter, 1000);
 </script>
